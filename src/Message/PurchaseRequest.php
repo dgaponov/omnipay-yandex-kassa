@@ -31,6 +31,7 @@ class PurchaseRequest extends AbstractRequest
             'return_url' => $this->getReturnUrl(),
             'transactionId' => $this->getTransactionId(),
             'capture' => $this->getCapture(),
+            'receipt' => $this->getReceipt(),
         ];
     }
 
@@ -51,6 +52,7 @@ class PurchaseRequest extends AbstractRequest
                 'metadata' => [
                     'transactionId' => $data['transactionId'],
                 ],
+                'receipt' => $data['receipt'],
             ], $this->makeIdempotencyKey());
 
             return $this->response = new PurchaseResponse($this, $paymentResponse);
