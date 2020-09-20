@@ -38,6 +38,14 @@ class PurchaseRequest extends AbstractRequest
     public function sendData($data)
     {
         try {
+            $receipt = $data['receipt'];
+            if (is_string($receipt) && !is_array($receipt)) {
+                try {
+                    $receipt = json_decode($receipt, true);
+                } catch (\Throwable $exception) {
+
+                }
+            }
             $paymentResponse = $this->client->createPayment([
                 'amount' => [
                     'value' => $data['amount'],
@@ -52,7 +60,8 @@ class PurchaseRequest extends AbstractRequest
                 'metadata' => [
                     'transactionId' => $data['transactionId'],
                 ],
-                'receipt' => $data['receipt'],
+                'receipt' => $receipt,
+
             ], $this->makeIdempotencyKey());
 
             return $this->response = new PurchaseResponse($this, $paymentResponse);
